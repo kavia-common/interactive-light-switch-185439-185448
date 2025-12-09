@@ -1,47 +1,61 @@
 import React, { useState, useEffect } from 'react';
-import logo from './logo.svg';
 import './App.css';
+import LightSwitch from './components/LightSwitch/LightSwitch';
 
 // PUBLIC_INTERFACE
 function App() {
   const [theme, setTheme] = useState('light');
+  const [isOn, setIsOn] = useState(false);
 
-  // Effect to apply theme to document element
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
   }, [theme]);
 
   // PUBLIC_INTERFACE
   const toggleTheme = () => {
-    setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light');
+    setTheme('light');
   };
 
   return (
     <div className="App">
-      <header className="App-header">
-        <button 
-          className="theme-toggle" 
+      <main className="panel" role="region" aria-label="Interactive light switch panel">
+        <button
+          className="theme-toggle"
           onClick={toggleTheme}
-          aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+          aria-label="Theme is light (locked for this demo)"
+          title="Theme: light (demo)"
         >
-          {theme === 'light' ? '🌙 Dark' : '☀️ Light'}
+          ☀️ Light
         </button>
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <p>
-          Current theme: <strong>{theme}</strong>
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+
+        <header className="header">
+          <h1 className="title">Interactive Light Switch</h1>
+          <p className="subtitle">Toggle the switch to turn the lights {isOn ? 'off' : 'on'} with animated glow and shadows</p>
+        </header>
+
+        <section className="controls" aria-live="polite">
+          <LightSwitch checked={isOn} onChange={setIsOn} />
+          <div className="badge" aria-hidden="true">
+            {isOn ? 'On' : 'Off'} mode • Smooth animation
+          </div>
+          <div className="settings" role="note" aria-label="Usage tip">
+            Tip: You can press Space or Enter to toggle
+          </div>
+        </section>
+
+        <footer className="footer">
+          Built with accents
+          {' '}
+          <a className="link" href="#" onClick={(e) => e.preventDefault()} aria-label="Primary accent is #3b82f6 and success accent is #06b6d4">
+            #3b82f6
+          </a>
+          {' '}and{' '}
+          <a className="link" href="#" onClick={(e) => e.preventDefault()}>
+            #06b6d4
+          </a>
+          . Secondary tone: #64748b
+        </footer>
+      </main>
     </div>
   );
 }
